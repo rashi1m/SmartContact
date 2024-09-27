@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{base::layout(~{::section})}">
+<head>
+	<meta charset="UTF-8" />
+	<title>Insert title here </title>
+</head>
+<body>
+<section>
+<div class="container p-5">
+<p class="text-center fs-3 mt-4">Admin Dashboard </p>
+<div class="row">
+<div class="col-md-4 mt-2">
+<a href= "/admin/loadAddProduct" class="text-decoration-none">
+<div class="card">
+<div class="card-body text-center text-primary">
+<i class="fas fa-solid fa-plus fa-2x"></i>
+<h4>Add Product</h4>
+</div>
+</div>
+</a>
+</div>
+
+<!-- second -->
+
+<div class="col-md-4 mt-2">
+<a href= "/admin/category" class="text-decoration-none">
+<div class="card">
+<div class="card-body text-center text-warning">
+<i class="fas fa-tasks fa-3x"></i>
+<h4>Add Category</h4>
+</div>
+</div>
+</a>
+</div>
+<!--second end  -->
+
+<!-- Third -->
+<div class="col-md-4 mt-2">
+<a href= "/admin/products" class="text-decoration-none">
+<div class="card">
+<div class="card-body text-center text-success">
+<i class="fas fa-table fa-2x"></i>
+<h4>View Product</h4>
+</div>
+</div>
+</a>
+</div>
+<!-- third end -->
+
+<!-- Fourth -->
+<div class="col-md-4 mt-4">
+<a href= "/admin/orders" class="text-decoration-none">
+<div class="card">
+<div class="card-body text-center text-warning">
+<i class="fas fa-box-open fa-2x"></i>
+<h4>Orders</h4>
+</div>
+</div>
+</a>
+</div>
+<!--Fourth end  -->
+
+<!-- five -->
+<div class="col-md-4 mt-4">
+<a href= "/admin/users" class="text-decoration-none">
+<div class="card">
+<div class="card-body text-center text-primary">
+<i class="fas fa-user fa-2x"></i>
+<h4>User</h4>
+</div>
+</div>
+</a>
+</div>
+<!-- five end -->
+
+<!-- Six -->
+<div class="col-md-4 mt-4">
+<a href= "#" class="text-decoration-none">
+<div class="card">
+<div class="card-body text-center text-danger">
+<i class="fas fa-user-lock fa-2x"></i>
+<h4>Add Admin</h4>
+</div>
+</div>
+</a>
+</div>
+<!--Six end  -->
+</div>
+</div>
+
+</section>
+	
+</body>
+</html>

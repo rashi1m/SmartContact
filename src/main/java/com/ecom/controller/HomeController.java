@@ -111,7 +111,7 @@ public class HomeController {
 			if(!file.isEmpty())
 			{
 				
-				 File saveFile = new ClassPathResource("static/img/profile/").getFile();
+				 File saveFile = new ClassPathResource("static/img").getFile();
 		    		Path path = Paths.get(saveFile.getAbsolutePath()+ File.separator +"profile"+File.separator 
 		    				+file.getOriginalFilename());
 		             

@@ -101,18 +101,16 @@ public class AdminController {
         Boolean existcategory = categoryService.existCategory(category.getName());
         if (existcategory) {
             session.setAttribute("errorMsg", "Category name already exists");
-            return "redirect:/admin/category";
+            
         } else {
             Category savedCategory = categoryService.saveCategory(category);
-            if (savedCategory == null) {
+            if (ObjectUtils.isEmpty(savedCategory)) {
                 session.setAttribute("errorMsg", "Not saved!! Internal server error");
             } else {
-                File saveFile = new ClassPathResource("static/img/category_images").getFile();
-                File categoryDir = new File(saveFile.getAbsolutePath() + File.separator + "category_images");
-                if (!categoryDir.exists()) {
-                    categoryDir.mkdirs();
-                }
-                Path path = Paths.get(categoryDir.getAbsolutePath() + File.separator + file.getOriginalFilename());
+                File saveFile = new ClassPathResource("static/img").getFile();
+                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "category_images"+File.separator+file.getOriginalFilename());
+                
+               System.out.println(path);
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                 session.setAttribute("succMsg", "Successfully saved");
             }
@@ -141,22 +139,20 @@ public class AdminController {
     @PostMapping("/updateCategory")
     public String updateCategory(@ModelAttribute Category category, @RequestParam("file") MultipartFile file, HttpSession session) throws IOException {
         Category category1 = categoryService.getCategoryById(category.getId());
-        String imageName = !file.isEmpty() ? file.getOriginalFilename() : category1.getImageName();
-        if (category1 != null) {
+        String imageName = !file.isEmpty() ?category1.getImageName():file.getOriginalFilename();
+        if (!ObjectUtils.isEmpty(category1)) {
             category1.setName(category.getName());
             category1.setIsActive(category.getIsActive());
             category1.setImageName(imageName);
         }
         Category updateCategory = categoryService.saveCategory(category1);
-        if (updateCategory != null) {
+        if (!ObjectUtils.isEmpty(updateCategory)) {
             if (!file.isEmpty()) {
-                File saveFile = new ClassPathResource("static/img/category_images/").getFile();
-                File categoryDir = new File(saveFile.getAbsolutePath() + File.separator + "category_images");
-                if (!categoryDir.exists()) {
-                    categoryDir.mkdirs();
-                }
-                Path path = Paths.get(categoryDir.getAbsolutePath() + File.separator + file.getOriginalFilename());
-                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                File saveFile = new ClassPathResource("static/img").getFile();
+                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator +"category_images"+File.separator+file.getOriginalFilename());
+                
+                System.out.println(path);
+                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
             }
             session.setAttribute("succMsg", "Category update success");
         } else {
@@ -168,15 +164,15 @@ public class AdminController {
     @PostMapping("/saveProduct")
     public String saveProduct(@ModelAttribute Product product,@RequestParam("file") MultipartFile image,
     		HttpSession session) throws IOException{
-    
-    	if(product.getDiscount()<0 || product.getDiscount()>100)
-    	{
-    		session.setAttribute("errorMsg","Invalid discount");
-    	}else {
+        String imageName = image.isEmpty()?"default.jpg" : image.getOriginalFilename();
+            product.setImage(imageName);
+            product.setDiscount(0);
+            product.setDiscountPrice(product.getPrice());
+    	
     	Product saveProduct = productService.saveProduct(product);
     	if(!ObjectUtils.isEmpty(saveProduct)) {
     		
-    		 File saveFile = new ClassPathResource("static/img/product_images/").getFile();
+    		 File saveFile = new ClassPathResource("static/img").getFile();
     		Path path = Paths.get(saveFile.getAbsolutePath()+ File.separator +"product_images"+File.separator 
     				+image.getOriginalFilename());
              
@@ -186,7 +182,7 @@ public class AdminController {
     	}else {
     		session.setAttribute("errorMsg","Something went wrong");
     	}
-    	}
+    	
     	return "redirect:/admin/loadAddProduct";
     }
     
@@ -217,21 +213,20 @@ public class AdminController {
     @PostMapping("/updateProduct")
     public String editProduct(@ModelAttribute Product product,Model m,
     		HttpSession session,@RequestParam("file") MultipartFile image) throws IOException {
+    	if(product.getDiscount()<0 || product.getDiscount()>100)
+    	{
+    		session.setAttribute("errorMsg","Invalid discount");
+    	}else {
     	Product updateproduct = productService.updateProduct(product, image);
     	if(!ObjectUtils.isEmpty(updateproduct)) {
     		
-    		 File saveFile = new ClassPathResource("static/img/product_images/").getFile();
-     		Path path = Paths.get(saveFile.getAbsolutePath()+ File.separator +"product_images"+File.separator 
-     				+image.getOriginalFilename());
-              
-              
-              Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+    		
     		session.setAttribute("succMsg","Product updated successfully");
     		
     	}else {
     		
     		session.setAttribute("errorMsg","something went wrong on server");
-    		
+    	}	
     	}
     	return "redirect:/admin/editProduct/" + product.getId();
     }
